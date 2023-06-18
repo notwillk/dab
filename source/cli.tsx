@@ -1,29 +1,29 @@
-#!/usr/bin/env node
-import React from 'react';
-import {render} from 'ink';
-import meow from 'meow';
-import App from './app.js';
+import meow, { Result } from "meow";
+
+const FLAGS = {
+    fix: {
+        type: 'boolean',
+    },
+} as const;
+
+export type CommandLineOptions = Result<typeof FLAGS>;
+export type Flags = CommandLineOptions['flags'];
 
 const cli = meow(
 	`
 	Usage
-	  $ dab
+	  $ dab [command]
 
 	Options
-		--name  Your name
+		--fix boolean
 
 	Examples
-	  $ dab --name=Jane
-	  Hello, Jane
+	  $ dab lint --fix
 `,
 	{
 		importMeta: import.meta,
-		flags: {
-			name: {
-				type: 'string',
-			},
-		},
+		flags: FLAGS,
 	},
 );
 
-render(<App name={cli.flags.name} />);
+export default cli;
